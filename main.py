@@ -14,12 +14,13 @@ def get_index():
 def get_headers(auth=Header(None)):
     if ':' in auth:
         extracted_user, extracted_password = tuple(auth.split(':'))
-        if users_db[extracted_user] == extracted_password:
-            return 'authorized'
-        else:
+        try: 
+            users_db[extracted_user] == extracted_password
+            return 'Authorized'
+        finally:
             return 'Not authorized'
     else:
-        return f'{auth} invalid format'
+        return f'{auth} invalid format, please provide auth in the following format: User:Password'
 
 if __name__ == "__main__":
     db = load_db()
