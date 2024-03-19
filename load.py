@@ -1,5 +1,6 @@
 import pandas as pd
 from typing import Optional
+from db.users_db import users_db
 
 def load_db(path: Optional[str] = None) -> pd.DataFrame:
     if path:
@@ -9,5 +10,9 @@ def load_db(path: Optional[str] = None) -> pd.DataFrame:
         
     return(db)
 
+def load_users_db() -> dict:
+    return(users_db)
+
 if __name__ == '__main__':
     db = load_db()
+    users_db = load_users_db()
