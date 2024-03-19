@@ -3,6 +3,7 @@ from fastapi import Header
 import uvicorn
 from load import load_db, load_users_db
 from typing import Optional
+from auth import auth_user
 
 
 app = FastAPI()
@@ -13,17 +14,14 @@ def get_index():
 
 @app.get('/authorization')
 def check_user(auth: Optional[str] = Header(None, description='user:password format')):
-    if ':' in auth:
-        extracted_user, extracted_password = tuple(auth.split(':'))
-        try: 
-            if users_db[extracted_user] == extracted_password:
-                return 'Authorized'
-            else:
-                return 'Not authorized'
-        except:
-            return 'Not authorized'
+    auth_status = auth_user(auth, users_db)
+    if auth_status == 'auth':
+        return 'Authorized'
+    elif auth_status == 'not_auth':
+        return 'Not Authorized'
     else:
-        return f'{auth} invalid format, please provide auth in the following format: User:Password'
+        return f'{auth} invalid format, check above for more details'
+    
 
 if __name__ == "__main__":
     db = load_db()
