@@ -1,6 +1,6 @@
 import pandas as pd
 from typing import Optional
-from db.users_db import users_db
+import json
 
 
 def load_questions_db(path: Optional[str] = None) -> pd.DataFrame:
@@ -12,7 +12,9 @@ def load_questions_db(path: Optional[str] = None) -> pd.DataFrame:
     return(db)
 
 def load_users_db() -> dict:
-    return(users_db)
+    return(json.load(open('src/utils/db/users_db.txt')))
+
+
 
 if __name__ == '__main__':
     db = load_questions_db()
