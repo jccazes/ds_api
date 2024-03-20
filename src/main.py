@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi import Header
 import uvicorn
-from load import load_questions_db, load_users_db
-from sample import sample_questions
+from utils.load import load_questions_db, load_users_db
+from utils.sample import sample_questions
 from typing import Optional
-from auth import auth_user
+from utils.auth import auth_user
 
 
 app = FastAPI()
