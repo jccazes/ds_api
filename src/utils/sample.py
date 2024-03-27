@@ -1,7 +1,10 @@
 import pandas as pd 
 from random import sample
+from utils.db.load import load_questions_db
 
-def sample_questions(df_questions,nb_questions: int):
+df_questions = load_questions_db()
+
+def sample_questions(nb_questions: int):
     sample_index = sample(df_questions.index.to_list(), nb_questions)
     
     sampled_df = df_questions.iloc[sample_index][['question','responseA','responseB','responseC','responseD','correct']]
