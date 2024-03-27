@@ -8,7 +8,6 @@ def load_questions_db(path: Optional[str] = None) -> pd.DataFrame:
         db = pd.read_csv(path)
     else:
         db = pd.read_csv('src/utils/db/questions.csv')
-        
     return(db)
 
 def load_users_db() -> dict:

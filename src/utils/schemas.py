@@ -1,11 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
-
-class user_login(BaseModel):
-    username_password: str
     
-    
-class quizz(BaseModel):
+class Quizz(BaseModel):
     question: str
     subject: str
     correct: str
