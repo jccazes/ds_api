@@ -18,5 +18,17 @@ def sample_questions(nb_questions: int):
                     reponseD=row_data['responseD'], correct=row_data['correct'])
         result_list.append(quizz)
 
-    
     return(result_list)
+
+def _update_questions_db(quizz: Quizz | None):
+    global df_questions
+    if quizz:
+        data = {'question': quizz.question, 'subject': quizz.subject, 'use': quizz.use, 
+                'responseA': quizz.reponseA, 'responseB': quizz.reponseB, 'responseC': quizz.reponseC, 
+                'responseD': quizz.reponseD, 'correct': quizz.correct}
+        df_questions = pd.concat([df_questions, pd.DataFrame([data])], ignore_index=True)
+        
+        
+        return None
+    else:
+        return None

@@ -15,6 +15,10 @@ def load_questions_db(path: Optional[str] = None) -> pd.DataFrame:
 def load_users_db() -> dict:
     return(json.load(open('src/utils/db/users_db.txt')))
 
+def _load_admin_db() -> dict:
+    return(json.load(open('src/utils/db/.secret.txt')))
+
 if __name__ == '__main__':
     db = load_questions_db()
     users_db = load_users_db()
+    _admin_db = _load_admin_db()

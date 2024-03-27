@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi import Header
 import uvicorn
-from utils.sample import sample_questions
+from utils.sample import sample_questions, _update_questions_db
 from typing import Annotated, Union
-from utils.auth import auth_user
+from utils.auth import auth_user, _is_admin
 from utils.schemas import Quizz
 from pydantic import StringConstraints
 
@@ -16,7 +16,7 @@ def get_index():
 @app.get('/authorization')
 async def read_items(header: Annotated[str, StringConstraints(pattern='\w*:\w*'), Header()] = None) -> dict:
     if header:
-        if auth_user(header):
+        if auth_user(header) or _is_admin(header):
             return {"User-Login-Header": 'authorized'}
         else:
             return {"User-Login-Header": 'not_authorized'}   
@@ -26,9 +26,20 @@ async def read_items(header: Annotated[str, StringConstraints(pattern='\w*:\w*')
 @app.get('/question')
 async def get_questionnaire(header: Annotated[str, StringConstraints(pattern='\w*:\w*'), Header()] = None, n_samples: int = 10) -> Union[list[Quizz],dict]:
     if header:
-        if auth_user(header):
+        if auth_user(header) or _is_admin(header):
             sampled_questions = sample_questions(n_samples)
             return sampled_questions
+        else:
+            return {"User-Login-Header": 'not_authorized'}   
+    else:
+        return {"User-Login-Header": 'not_authorized'}   
+    
+@app.post('/add_question')
+async def add_question(header: Annotated[str, StringConstraints(pattern='\w*:\w*'), Header()] = None, quizz: Quizz = None) -> dict:
+    if header:
+        if _is_admin(header):
+            _update_questions_db(quizz)
+            return {"User-Login-Header": 'quizz updated'}   
         else:
             return {"User-Login-Header": 'not_authorized'}   
     else:
