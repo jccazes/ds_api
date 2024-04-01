@@ -5,11 +5,24 @@ from utils.schemas import Quizz
 
 df_questions = load_questions_db()
 
-def sample_questions(nb_questions: int):
-    sample_index = sample(df_questions.index.to_list(), nb_questions)
+def sample_questions(nb_questions: int, use: str, subject: str) -> list[Quizz] | None:
     
+    subject_list = subject.split(',')
+    
+    df_select = df_questions[(df_questions['subject'].isin(subject_list)) & 
+                                    (df_questions['use'] == use)]
+
+    if df_select.shape[0] >= nb_questions:
+        sample_index = sample(df_select.index.tolist(), nb_questions)
+        
+    elif 1 <= df_select.shape[0] <= nb_questions:
+        sample_index = df_select.index.tolist()
+        
+    else:
+        return None
+        
     sampled_df = df_questions.iloc[sample_index][['question','responseA','responseB','responseC','responseD','correct','subject','use']]
-    
+           
     result_list = []
     for row in range(len(sampled_df)):
         row_data = sampled_df.iloc[row]
