@@ -6,8 +6,8 @@ from utils.schemas import Quizz
 df_questions = load_questions_db()
 
 def sample_questions(nb_questions: int, use: str, subject: str) -> list[Quizz] | None:
-    
-    subject_list = subject.split(',')
+
+    subject_list = [s.strip() for s in subject.split(',') if s!= '']
     
     df_select = df_questions[(df_questions['subject'].isin(subject_list)) & 
                                     (df_questions['use'] == use)]

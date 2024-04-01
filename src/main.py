@@ -24,11 +24,16 @@ async def read_items(header: Annotated[str, StringConstraints(pattern='\w*:\w*')
         return {"User-Login-Header": 'not_authorized'}        
     
 @app.get('/question')
-async def get_questionnaire(header: Annotated[str, StringConstraints(pattern='\w*:\w*'), Header()] = None, n_samples: int = 10) -> Union[list[Quizz],dict]:
+async def get_questionnaire(header: Annotated[str, StringConstraints(pattern='\w*:\w*'), Header()] = None, 
+                            n_samples: int = 10, use: str = 'Total BootCamp', 
+                            subject: Annotated[str, StringConstraints(pattern='/(\w+,)*\w+')] = 'Total Bootcamp') -> Union[list[Quizz],dict]:
     if header:
         if auth_user(header) or _is_admin(header):
-            sampled_questions = sample_questions(n_samples)
-            return sampled_questions
+            sampled_questions = sample_questions(n_samples, use, subject)
+            if sampled_questions:
+                return sampled_questions
+            else:
+                return  {"Query-Parameters-Error": 'no_data'}   
         else:
             return {"User-Login-Header": 'not_authorized'}   
     else:
