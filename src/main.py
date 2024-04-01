@@ -25,8 +25,8 @@ async def read_items(header: Annotated[str, StringConstraints(pattern='\w*:\w*')
     
 @app.get('/question')
 async def get_questionnaire(header: Annotated[str, StringConstraints(pattern='\w*:\w*'), Header()] = None, 
-                            n_samples: int = 10, use: str = 'Total BootCamp', 
-                            subject: Annotated[str, StringConstraints(pattern='/(\w+,)*\w+')] = 'Total Bootcamp') -> Union[list[Quizz],dict]:
+                            n_samples: int = 10, use: str = 'Total Bootcamp', 
+                            subject: Annotated[str, StringConstraints(pattern='^[\w\s]*(?:,\s*[\w\s]+)*$')] = 'Machine Learning, Data Science') -> Union[list[Quizz],dict]:
     if header:
         if auth_user(header) or _is_admin(header):
             sampled_questions = sample_questions(n_samples, use, subject)
